@@ -1,0 +1,66 @@
+<configuration debug="false">
+
+    <property name="app" value="anydoor-hotel"/>
+    <property name="filename" value="server"/>
+
+    <import class="ch.qos.logback.classic.encoder.PatternLayoutEncoder"/>
+    <import class="ch.qos.logback.core.ConsoleAppender"/>
+    <import class="ch.qos.logback.classic.filter.ThresholdFilter"/>
+    <import class="ch.qos.logback.core.rolling.RollingFileAppender"/>
+    <import class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"/>
+    <import class="ch.qos.logback.classic.AsyncAppender"/>
+
+
+    <appender name="STDOUT" class="ConsoleAppender">
+        <encoder class="PatternLayoutEncoder">
+            <pattern>[%date{ISO8601}] [%level] %logger{80}-%line [%thread-${PID}] [%X{traceId}] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="RollingFileAppender">
+        <file>/data/log-center/${app}/${filename}.info.log</file>
+        <rollingPolicy class="TimeBasedRollingPolicy">
+            <fileNamePattern>/data/log-center/${app}/${filename}.info.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>15</maxHistory>
+        </rollingPolicy>
+        <encoder class="PatternLayoutEncoder">
+            <pattern>[${app}]-[%date{ISO8601}] [%level] %logger{80} [%thread] [%X{TRACE_ID}] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <appender name="FILE_ERROR" class="RollingFileAppender">
+        <file>/www/wwwlogs/java/springboot/${app}/${filename}.error.log</file>
+        <rollingPolicy class="TimeBasedRollingPolicy">
+            <fileNamePattern>/www/wwwlogs/java/springboot/${app}/${filename}.error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>15</maxHistory>
+        </rollingPolicy>
+        <encoder class="PatternLayoutEncoder">
+            <pattern>[${app}]-[%date{ISO8601}] [%level] %logger{80} [%thread] [%X{TRACE_ID}] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+    </appender>
+
+    <appender name="ASYNC_FILE" class="AsyncAppender">
+        <queueSize>1024</queueSize>
+        <!-- 队列满了不丢弃任一日志事件 -->
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="FILE"/>
+    </appender>
+
+
+    <root level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="ASYNC_FILE"/>
+        <appender-ref ref="FILE_ERROR"/>
+    </root>
+
+
+</configuration>
