@@ -17,7 +17,7 @@ public class AbstractStrategyChoose implements ApplicationContextAware, Initiali
 
     public AbstractExecuteStrategy choose(String mark) {
         return Optional.ofNullable(abstractExecuteStrategyMap.get(mark))
-                .orElseThrow(() -> new RuntimeException(String.format("[%s] 策略未定义", mark)));
+                .orElseThrow(() -> new RuntimeException(String.format("[%s] Strategy undefine", mark)));
     }
 
     public <REQUEST> void chooseAndExecute(String mark, REQUEST requestParam) {
@@ -38,7 +38,7 @@ public class AbstractStrategyChoose implements ApplicationContextAware, Initiali
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         Map<String, AbstractExecuteStrategy> executeStrategyMap = applicationContext.getBeansOfType(AbstractExecuteStrategy.class);
         executeStrategyMap.forEach((beanName, bean) -> {
             if(abstractExecuteStrategyMap.containsKey(bean.mark())) {

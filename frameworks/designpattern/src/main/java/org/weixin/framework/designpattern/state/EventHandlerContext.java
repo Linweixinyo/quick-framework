@@ -29,7 +29,7 @@ public class EventHandlerContext implements ApplicationContextAware, Initializin
                 return eventHandler;
             }
         }
-        throw new IllegalStateException(String.format("State[%s] Event[%s] Not found eventHandler", state, event));
+        throw new IllegalStateException(String.format("State[%s] Event[%s] Not found eventHandler", state.getClass().getSimpleName(), event.getClass().getSimpleName()));
     }
 
     public <T> Class<? extends T> getEventClass(EventHandler<? extends BaseState, ? extends BaseEvent> eventHandler, Class<T> clazz) {
@@ -56,12 +56,12 @@ public class EventHandlerContext implements ApplicationContextAware, Initializin
                             }
                         }
                     } else {
-                        throw new IllegalStateException(String.format("EventHandler(%s) Unable to get type", eventHandler));
+                        throw new IllegalStateException(String.format("EventHandler(%s) Unable to get type", eventHandler.getClass().getSimpleName()));
                     }
                 }
             }
         }
-        throw new IllegalStateException(String.format("EventHandler(%s) Unable to get type", eventHandler));
+        throw new IllegalStateException(String.format("EventHandler(%s) Unable to get type", eventHandler.getClass().getSimpleName()));
     }
 
 
