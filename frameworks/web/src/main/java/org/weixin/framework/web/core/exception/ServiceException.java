@@ -1,6 +1,6 @@
 package org.weixin.framework.web.core.exception;
 
-public class ServiceException extends AbstractException{
+public class ServiceException extends AbstractException {
 
     public ServiceException(String message) {
         this(message, null, BaseErrorCode.SERVICE_ERROR);

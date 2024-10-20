@@ -1,10 +1,12 @@
 package org.weixin.framework.web.core.exception;
 
 
+import cn.hutool.core.util.StrUtil;
+
 import java.util.Optional;
 
 
-public class AbstractException extends RuntimeException{
+public class AbstractException extends RuntimeException {
 
     private final String errorCode;
 
@@ -15,7 +17,7 @@ public class AbstractException extends RuntimeException{
         super(message, cause);
         this.errorCode = errorCode.code();
         this.errorMessage = Optional.ofNullable(message)
-                .filter(msg -> !msg.isBlank())
+                .filter(StrUtil::isNotBlank)
                 .orElse(errorCode.message());
     }
 

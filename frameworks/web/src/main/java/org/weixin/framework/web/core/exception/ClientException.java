@@ -1,6 +1,6 @@
 package org.weixin.framework.web.core.exception;
 
-public class ClientException extends AbstractException{
+public class ClientException extends AbstractException {
 
     public ClientException(IErrorCode errorCode) {
         this(null, errorCode);
