@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>frameworks</module>
+        <module>service-demo</module>
     </modules>
     <packaging>pom</packaging>
 

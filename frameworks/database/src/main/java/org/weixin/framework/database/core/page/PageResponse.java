@@ -1,10 +1,8 @@
-package org.weixin.framework.web.core.req;
+package org.weixin.framework.database.core.page;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;

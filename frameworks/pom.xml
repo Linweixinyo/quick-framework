@@ -16,6 +16,8 @@
         <module>mq</module>
         <module>designpattern</module>
         <module>swagger</module>
+        <module>database</module>
+        <module>websocket</module>
     </modules>
 
     <artifactId>frameworks</artifactId>

@@ -1,4 +1,4 @@
-package org.weixin.framework.web.core.req;
+package org.weixin.framework.database.core.page;
 
 
 import lombok.Data;
