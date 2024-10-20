@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = SwaggerProperties.SWAGGER_PREFIX)
 public class SwaggerProperties {
 
-    public static final String SWAGGER_PREFIX = "swagger.config";
+    public static final String SWAGGER_PREFIX = "framework.swagger.config";
 
     /**
      * 标题

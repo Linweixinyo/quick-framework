@@ -16,15 +16,15 @@ public class EventHandlerContext implements ApplicationContextAware, Initializin
 
     private ApplicationContext applicationContext;
 
-    private static final Map<EventHandler<? extends BaseState, ? extends BaseEvent>, BaseState> HANDLER = new HashMap<>();
+    private static final Map<EventHandler, BaseState> HANDLER = new HashMap<>();
 
     public EventHandler getHandlerEvent(BaseState state, BaseEvent event) {
         if(Objects.isNull(state) || Objects.isNull(event)) {
             throw new IllegalStateException("State or event is null");
         }
-        for (EventHandler<? extends BaseState, ? extends BaseEvent> eventHandler : HANDLER.keySet()) {
-            Class<? extends BaseState> stateClazz = getEventClass(eventHandler, BaseState.class);
-            Class<? extends BaseEvent> eventClazz = getEventClass(eventHandler, BaseEvent.class);
+        for (EventHandler eventHandler : HANDLER.keySet()) {
+            Class<BaseState> stateClazz = getEventClass(eventHandler, BaseState.class);
+            Class<BaseEvent> eventClazz = getEventClass(eventHandler, BaseEvent.class);
             if(state.getClass().isAssignableFrom(stateClazz) && event.getClass().isAssignableFrom(eventClazz)) {
                 return eventHandler;
             }
@@ -32,7 +32,7 @@ public class EventHandlerContext implements ApplicationContextAware, Initializin
         throw new IllegalStateException(String.format("State[%s] Event[%s] Not found eventHandler", state.getClass().getSimpleName(), event.getClass().getSimpleName()));
     }
 
-    public <T> Class<? extends T> getEventClass(EventHandler<? extends BaseState, ? extends BaseEvent> eventHandler, Class<T> clazz) {
+    public <T> Class<T> getEventClass(EventHandler eventHandler, Class<T> clazz) {
         Class<?> targetClass = AopProxyUtils.ultimateTargetClass(eventHandler);
         // 获得接口的 Type 数组
         Type[] interfaces = targetClass.getGenericInterfaces();
@@ -52,7 +52,7 @@ public class EventHandlerContext implements ApplicationContextAware, Initializin
                     if (Objects.nonNull(actualTypeArguments) && actualTypeArguments.length > 0) {
                         for (Type actualTypeArgument : actualTypeArguments) {
                             if(actualTypeArgument instanceof Class<?> actualClazz && clazz.isAssignableFrom(actualClazz)) {
-                                return (Class<? extends T>) actualClazz;
+                                return (Class<T>) actualClazz;
                             }
                         }
                     } else {
