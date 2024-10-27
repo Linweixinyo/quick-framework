@@ -3,11 +3,9 @@ package org.weixin.framework.cache.toolkit;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
-import org.redisson.api.RedissonClient;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
-import org.springframework.util.StringUtils;
 import org.weixin.framework.common.toolkit.jackson.JSONUtil;
 
 import java.util.Arrays;

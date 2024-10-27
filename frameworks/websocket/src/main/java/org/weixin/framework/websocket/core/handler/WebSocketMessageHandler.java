@@ -63,7 +63,7 @@ public class WebSocketMessageHandler extends TextWebSocketHandler {
         messageExecutor.execute(session, webSocketMessage);
     }
 
-    public static Class<? extends WebSocketMessage> getMessageClass(WebSocketMessageExecutor messageExecutor) {
+    public Class<? extends WebSocketMessage> getMessageClass(WebSocketMessageExecutor messageExecutor) {
         // 获得 Bean 对应的 Class 类名。因为有可能被 AOP 代理过。
         Class<?> targetClass = AopProxyUtils.ultimateTargetClass(messageExecutor);
         // 获得接口的 Type 数组

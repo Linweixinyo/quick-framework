@@ -18,11 +18,18 @@
         <module>swagger</module>
         <module>database</module>
         <module>websocket</module>
+        <module>canal</module>
     </modules>
 
     <artifactId>frameworks</artifactId>
     <packaging>pom</packaging>
 
+    <dependencies>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+    </dependencies>
 
 
 </project>
