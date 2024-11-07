@@ -1,12 +1,28 @@
 package org.weixin.framework.web.toolkit;
 
+import cn.hutool.json.JSONUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.MediaType;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Optional;
 
 public final class ServletUtil {
+
+    public static void writeJSON(HttpServletResponse response, Object object) {
+        String content = JSONUtil.toJsonStr(object);
+        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        try (PrintWriter writer = response.getWriter()) {
+            writer.write(content);
+            writer.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static HttpServletRequest getRequest() {
         return Optional.ofNullable(RequestContextHolder.getRequestAttributes())

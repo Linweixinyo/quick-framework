@@ -6,6 +6,8 @@ public enum BaseErrorCode implements IErrorCode {
     VERIFY_CODE_ERROR("A000002", "图片验证码不正确"),
     PASSWORD_ERROR("A000003", "密码不正确"),
     CHECK_PASSWORD_ERROR("A000004", "确认密码不一致"),
+    UNAUTHORIZED_ERROR("A000401", "未认证"),
+    FORBIDDEN_ERROR("A000403", "没有操作权限"),
     // ========== 一级宏观错误码 系统执行出错 ==========
     SERVICE_ERROR("B000001", "系统执行出错"),
     UPDATE_ERROR("B000002", "更新失败"),

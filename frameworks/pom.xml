@@ -19,6 +19,7 @@
         <module>database</module>
         <module>websocket</module>
         <module>canal</module>
+        <module>security</module>
     </modules>
 
     <artifactId>frameworks</artifactId>

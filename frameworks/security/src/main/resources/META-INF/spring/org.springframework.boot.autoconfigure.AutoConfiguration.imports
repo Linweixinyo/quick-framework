@@ -1,0 +1,2 @@
+org.weixin.framework.security.config.SecurityConfiguration
+org.weixin.framework.security.config.SecurityAutoConfiguration
