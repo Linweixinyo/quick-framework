@@ -23,7 +23,7 @@ public final class Results {
     /**
      * 携带数据的成功响应
      */
-    public static<T> Result<T> success(T data) {
+    public static <T> Result<T> success(T data) {
         return new Result<T>()
                 .setCode(SUCCESS_CODE)
                 .setMessage(SUCCESS)

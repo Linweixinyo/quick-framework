@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.weixin.framework.web.core.exception.GlobalExceptionHandler;
 
 public class WebAutoConfiguration {
 
@@ -24,5 +25,9 @@ public class WebAutoConfiguration {
         return filterRegistration;
     }
 
+    @Bean
+    public GlobalExceptionHandler globalExceptionHandler() {
+        return new GlobalExceptionHandler();
+    }
 
 }

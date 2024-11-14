@@ -20,6 +20,7 @@
         <module>websocket</module>
         <module>canal</module>
         <module>security</module>
+        <module>encrypt</module>
     </modules>
 
     <artifactId>frameworks</artifactId>

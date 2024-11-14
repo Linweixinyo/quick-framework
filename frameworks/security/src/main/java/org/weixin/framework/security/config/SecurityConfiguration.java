@@ -69,6 +69,7 @@ public class SecurityConfiguration implements ApplicationContextAware {
 
         // 配置请求路径权限
         httpSecurity
+                .authorizeHttpRequests(registry -> authorizeRequestsCustomizers.forEach(authorizeRequestsCustomizer -> authorizeRequestsCustomizer.customize(registry)))
                 .authorizeHttpRequests(registry -> {
                     permitAllUrls.forEach((methodName, urls) -> {
                         registry.requestMatchers(HttpMethod.valueOf(methodName), urls.toArray(new String[0])).permitAll();
@@ -76,8 +77,7 @@ public class SecurityConfiguration implements ApplicationContextAware {
                     registry.requestMatchers(new RegexRequestMatcher("^.*\\.(html|js|css|ico)$", HttpMethod.GET.name())).permitAll()
                             .requestMatchers(securityProperties.getIgnoreUrls().toArray(new String[0])).permitAll()
                             .anyRequest().authenticated();
-                })
-                .authorizeHttpRequests(registry -> authorizeRequestsCustomizers.forEach(authorizeRequestsCustomizer -> authorizeRequestsCustomizer.customize(registry)));
+                });
         httpSecurity.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
 
