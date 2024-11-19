@@ -86,7 +86,7 @@ public class SecurityConfiguration implements ApplicationContextAware {
 
     public Map<String, Set<String>> getPermitAllUrls() {
         Map<String, Set<String>> methodToUrls = new HashMap<>();
-        RequestMappingHandlerMapping requestMappingHandlerMapping = applicationContext.getBean(RequestMappingHandlerMapping.class);
+        RequestMappingHandlerMapping requestMappingHandlerMapping = applicationContext.getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class);
         Map<RequestMappingInfo, HandlerMethod> handlerMethods = requestMappingHandlerMapping.getHandlerMethods();
         handlerMethods.forEach(((requestMappingInfo, handlerMethod) -> {
             if (!handlerMethod.hasMethodAnnotation(PermitAll.class)) {

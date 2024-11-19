@@ -21,6 +21,7 @@
         <module>canal</module>
         <module>security</module>
         <module>encrypt</module>
+        <module>idempotent</module>
     </modules>
 
     <artifactId>frameworks</artifactId>

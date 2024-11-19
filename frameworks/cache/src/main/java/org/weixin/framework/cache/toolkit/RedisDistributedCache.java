@@ -57,9 +57,20 @@ public final class RedisDistributedCache {
         return result;
     }
 
+    public Boolean setObjectIfAbsent(String key, Object value, long timeout, TimeUnit timeUnit) {
+        Class<?> clazz = value.getClass();
+        String valueStr;
+        if (String.class.isAssignableFrom(clazz)) {
+            valueStr = (String) value;
+        } else {
+            valueStr = JSONUtil.toJsonStr(value);
+        }
+        return stringRedisTemplate.opsForValue().setIfAbsent(key, valueStr, timeout, timeUnit);
+    }
+
     public <T> T get(String key, Class<T> clazz) {
         String value = stringRedisTemplate.opsForValue().get(key);
-        if(String.class.isAssignableFrom(clazz)) {
+        if (String.class.isAssignableFrom(clazz)) {
             return (T) value;
         }
         return JSONUtil.parseObject(value, clazz);
@@ -76,7 +87,7 @@ public final class RedisDistributedCache {
     }
 
     public Boolean put(String key, Object value) {
-        if(!StrUtil.isBlank(key) || value == null) {
+        if (!StrUtil.isBlank(key) || value == null) {
             return false;
         }
         String actual = value instanceof String ? (String) value : JSONUtil.toJsonStr(value);
@@ -85,7 +96,7 @@ public final class RedisDistributedCache {
     }
 
     public Boolean put(String key, Object value, long timeout, TimeUnit timeUnit) {
-        if(!StrUtil.isBlank(key) || value == null) {
+        if (!StrUtil.isBlank(key) || value == null) {
             return false;
         }
         String actual = value instanceof String ? (String) value : JSONUtil.toJsonStr(value);
