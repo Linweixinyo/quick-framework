@@ -13,6 +13,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.weixin.framework.security.core.filter.TokenAuthenticationFilter;
 import org.weixin.framework.security.core.handler.AccessDeniedHandlerImpl;
 import org.weixin.framework.security.core.handler.AuthenticationEntryPointImpl;
+import org.weixin.framework.security.core.handler.SecurityExceptionHandler;
 import org.weixin.framework.security.core.permission.DefaultPermissionServiceImpl;
 import org.weixin.framework.security.core.permission.PermissionService;
 import org.weixin.framework.security.core.token.DefaultTokenVerifyServiceImpl;
@@ -55,6 +56,11 @@ public class SecurityAutoConfiguration {
     @Bean
     public TokenAuthenticationFilter tokenAuthenticationFilter(TokenVerifyService tokenVerifyService) {
         return new TokenAuthenticationFilter(securityProperties, tokenVerifyService);
+    }
+
+    @Bean
+    public SecurityExceptionHandler securityExceptionHandler() {
+        return new SecurityExceptionHandler();
     }
 
     @Bean
