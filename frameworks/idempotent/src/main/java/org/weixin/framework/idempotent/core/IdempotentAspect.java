@@ -14,10 +14,12 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.web.multipart.MultipartFile;
 import org.weixin.framework.cache.toolkit.RedisDistributedCache;
 import org.weixin.framework.idempotent.annotation.Idempotent;
 import org.weixin.framework.idempotent.config.IdempotentProperties;
+import org.weixin.framework.idempotent.toolkit.SpELUtil;
 import org.weixin.framework.web.core.exception.ServiceException;
 import org.weixin.framework.web.core.res.Result;
 import org.weixin.framework.web.core.res.Results;
@@ -41,15 +43,23 @@ public class IdempotentAspect {
         if (interval < 1000) {
             throw new ServiceException("idempotent interval must be greater than 1 second");
         }
+        if (StrUtil.isNotBlank(idempotent.key())) {
+            String key = (String) SpELUtil.parse(idempotent.key(), ((MethodSignature) joinPoint.getSignature()).getMethod(), joinPoint.getArgs());
+            setUnionKey(idempotent, key);
+            return;
+        }
         HttpServletRequest request = ServletUtil.getRequest();
         String requestURI = request.getRequestURI();
         String tokenValue = Optional.ofNullable(request.getHeader(idempotentProperties.getPrefix())).orElse(StrUtil.EMPTY);
         String paramStr = argsArrayToString(joinPoint.getArgs());
         String unionParam = SecureUtil.md5(String.join(StrUtil.COLON, tokenValue, paramStr));
         String redisKey = String.join(StrUtil.COLON, IDEMPOTENT_KEY, requestURI, unionParam);
+        setUnionKey(idempotent, redisKey);
+    }
 
-        if (redisDistributedCache.setObjectIfAbsent(redisKey, StrUtil.EMPTY, idempotent.interval(), idempotent.timeUnit())) {
-            IdempotentContext.setKey(redisKey);
+    private void setUnionKey(Idempotent idempotent, String unionKey) {
+        if (redisDistributedCache.setObjectIfAbsent(unionKey, StrUtil.EMPTY, idempotent.interval(), idempotent.timeUnit())) {
+            IdempotentContext.setKey(unionKey);
         } else {
             throw new ServiceException(idempotent.message());
         }
