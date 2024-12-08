@@ -22,6 +22,7 @@
         <module>security</module>
         <module>encrypt</module>
         <module>idempotent</module>
+        <module>sse</module>
     </modules>
 
     <artifactId>frameworks</artifactId>
