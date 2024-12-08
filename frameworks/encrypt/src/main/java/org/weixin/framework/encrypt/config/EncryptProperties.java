@@ -17,6 +17,11 @@ public class EncryptProperties {
     private Boolean enabled;
 
     /**
+     * 是否校验签名
+     */
+    private Boolean checkSign;
+
+    /**
      * 私钥
      */
     private String privateKey;

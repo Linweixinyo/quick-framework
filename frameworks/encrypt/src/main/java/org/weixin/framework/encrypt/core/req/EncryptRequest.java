@@ -18,4 +18,10 @@ public class EncryptRequest {
      */
     private String aesKey;
 
+
+    /**
+     * 签名
+     */
+    private String sign;
+
 }

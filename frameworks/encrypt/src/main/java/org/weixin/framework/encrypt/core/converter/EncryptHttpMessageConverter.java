@@ -13,9 +13,11 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.util.StreamUtils;
 import org.weixin.framework.encrypt.config.EncryptProperties;
 import org.weixin.framework.encrypt.core.Encryptable;
+import org.weixin.framework.encrypt.core.callback.EncryptProcessorCallback;
 import org.weixin.framework.encrypt.core.constant.EncryptConstant;
 import org.weixin.framework.encrypt.core.req.EncryptRequest;
 import org.weixin.framework.encrypt.core.res.EncryptRes;
+import org.weixin.framework.encrypt.core.service.SignatureService;
 import org.weixin.framework.encrypt.toolkit.AESUtil;
 import org.weixin.framework.encrypt.toolkit.RSAUtil;
 import org.weixin.framework.web.toolkit.ServletUtil;
@@ -23,12 +25,16 @@ import org.weixin.framework.web.toolkit.ServletUtil;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 public class EncryptHttpMessageConverter extends MappingJackson2HttpMessageConverter implements GenericHttpMessageConverter<Object> {
 
     private final EncryptProperties encryptProperties;
 
+    private final SignatureService signatureService;
+
+    private final EncryptProcessorCallback encryptProcessorCallback;
 
     @Override
     public Object read(Type type, Class<?> contextClass, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
@@ -50,9 +56,22 @@ public class EncryptHttpMessageConverter extends MappingJackson2HttpMessageConve
                 String aesKey = RSAUtil.decrypt(encryptRequest.getAesKey(), privateKey);
                 HttpServletRequest request = ServletUtil.getRequest();
                 request.setAttribute(EncryptConstant.AES_KEY_ATTRIBUTE, aesKey);
+                String encryptData = encryptRequest.getData();
+                // 校验签名
+                boolean checkSign = Objects.nonNull(encryptProperties.getCheckSign()) && encryptProperties.getCheckSign();
+                if (checkSign && signatureService.checkHeader(request)) {
+                    String signature = signatureService.buildSignature(encryptData);
+                    if (!Objects.equals(signature, encryptRequest.getSign())) {
+                        throw new IllegalArgumentException("Signature parameters is error");
+                    }
+                }
+
                 // 使用AES密钥解密数据
-                String data = AESUtil.decrypt(encryptRequest.getData(), aesKey);
-                return JSONUtil.toBean(data, clazz);
+                encryptProcessorCallback.decryptBefore(encryptData, aesKey);
+                String data = AESUtil.decrypt(encryptData, aesKey);
+                Object requestData = JSONUtil.toBean(data, clazz);
+                encryptProcessorCallback.decryptAfter(requestData);
+                return requestData;
             } catch (Exception e) {
                 throw new IllegalStateException(e);
             }
@@ -70,8 +89,11 @@ public class EncryptHttpMessageConverter extends MappingJackson2HttpMessageConve
             if (StrUtil.isBlank(aesKey)) {
                 super.writeInternal(object, type, outputMessage);
             } else {
+                encryptProcessorCallback.encryptBefore(object);
+                String encryptData = AESUtil.encrypt(JSONUtil.toJsonStr(object), aesKey);
                 EncryptRes encryptResult = new EncryptRes()
-                        .setData(AESUtil.encrypt(JSONUtil.toJsonStr(object), aesKey));
+                        .setData(encryptData);
+                encryptProcessorCallback.encryptAfter(encryptData);
                 super.writeInternal(encryptResult, type, outputMessage);
             }
         } else {

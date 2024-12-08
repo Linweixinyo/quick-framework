@@ -10,14 +10,22 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.weixin.framework.encrypt.config.EncryptProperties;
 import org.weixin.framework.encrypt.core.Encryptable;
+import org.weixin.framework.encrypt.core.callback.EncryptProcessorCallback;
 import org.weixin.framework.encrypt.core.constant.EncryptConstant;
+import org.weixin.framework.encrypt.core.service.SignatureService;
 import org.weixin.framework.encrypt.toolkit.AESUtil;
 import org.weixin.framework.encrypt.toolkit.RSAUtil;
+
+import java.util.Objects;
 
 @RequiredArgsConstructor
 public class EncryptableArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final EncryptProperties encryptProperties;
+
+    private final SignatureService signatureService;
+
+    private final EncryptProcessorCallback encryptProcessorCallback;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -32,8 +40,21 @@ public class EncryptableArgumentResolver implements HandlerMethodArgumentResolve
         // 获取 HttpServletRequest 对象
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         request.setAttribute(EncryptConstant.AES_KEY_ATTRIBUTE, aesKey);
+        String encryptData = webRequest.getParameter("data");
+        String signOfRequest = webRequest.getParameter("sign");
+        // 校验签名
+        boolean checkSign = Objects.nonNull(encryptProperties.getCheckSign()) && encryptProperties.getCheckSign();
+        if (checkSign && signatureService.checkHeader(request)) {
+            String signature = signatureService.buildSignature(encryptData);
+            if (!Objects.equals(signature, signOfRequest)) {
+                throw new IllegalArgumentException("Signature parameters is error");
+            }
+        }
         // 使用AES密钥解密数据
-        String data = AESUtil.decrypt(webRequest.getParameter("data"), aesKey);
-        return JSONUtil.toBean(data, parameter.getParameterType());
+        encryptProcessorCallback.decryptBefore(encryptData, aesKey);
+        String data = AESUtil.decrypt(encryptData, aesKey);
+        Object requestData = JSONUtil.toBean(data, parameter.getParameterType());
+        encryptProcessorCallback.decryptAfter(requestData);
+        return requestData;
     }
 }
