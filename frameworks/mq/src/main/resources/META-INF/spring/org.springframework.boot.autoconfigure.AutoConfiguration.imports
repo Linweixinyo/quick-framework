@@ -1,1 +1,2 @@
 org.weixin.framework.mq.config.RabbitMQAutoConfiguration
+org.weixin.framework.mq.config.RedisMQAutoConfiguration

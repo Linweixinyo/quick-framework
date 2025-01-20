@@ -16,7 +16,7 @@
         <spring-cloud-alibaba.version>2022.0.0.0-RC2</spring-cloud-alibaba.version>
         <knife4j.version>4.3.0</knife4j.version>
         <hutool.version>5.8.20</hutool.version>
-        <redisson.version>3.21.3</redisson.version>
+        <redisson.version>3.24.3</redisson.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <jjwt.version>0.9.1</jjwt.version>
         <easyexcel.verion>3.3.4</easyexcel.verion>
@@ -27,6 +27,7 @@
         <ip2region.version>2.7.0</ip2region.version>
         <fastjson2.version>2.0.36</fastjson2.version>
         <httpclient.version>4.5.13</httpclient.version>
+        <logstash-logback-encoder.version>7.2</logstash-logback-encoder.version>
     </properties>
 
     <dependencyManagement>
@@ -142,6 +143,12 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>${httpclient.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${logstash-logback-encoder.version}</version>
             </dependency>
 
         </dependencies>

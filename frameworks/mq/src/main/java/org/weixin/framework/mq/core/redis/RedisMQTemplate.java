@@ -21,7 +21,11 @@ public class RedisMQTemplate {
                 .withStreamKey(message.getStreamKey()));
     }
 
+    public void acknowledge(String group, String streamKey, RecordId... recordIds) {
+        stringRedisTemplate.opsForStream().acknowledge(streamKey, group, recordIds);
+    }
 
-
-
+    public StringRedisTemplate getStringRedisTemplate() {
+        return stringRedisTemplate;
+    }
 }
