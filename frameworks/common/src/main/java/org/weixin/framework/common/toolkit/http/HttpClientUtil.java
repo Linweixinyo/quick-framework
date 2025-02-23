@@ -7,6 +7,7 @@ import org.apache.http.HeaderElement;
 import org.apache.http.HeaderElementIterator;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -27,7 +28,9 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicHeaderElementIterator;
 import org.apache.http.protocol.HTTP;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.Objects;
@@ -123,6 +126,26 @@ public final class HttpClientUtil {
             throw e;
         }
         return response;
+    }
+
+    // 展示如何对接SSE接口
+    // 公共的websocket和sse接口 https://websocket.org/tools/websocket-echo-server/#websocket-echo-server
+    public static void main(String[] args) throws IOException, URISyntaxException {
+        HttpGet httpGet = new HttpGet("https://echo.websocket.org/.sse");
+        httpGet.setHeader("Accept", "text/event-stream");
+        try (CloseableHttpResponse response = HTTP_CLIENT.execute(httpGet);
+             BufferedReader reader = new BufferedReader(
+                     new InputStreamReader(response.getEntity().getContent()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // 解析SSE事件
+                if (line.startsWith("data:")) {
+                    String eventData = line.substring(5).trim();
+                    System.out.println("Received event: " + eventData);
+                }
+                // 处理其他事件类型（如event:、id:等）
+            }
+        }
     }
 
 
