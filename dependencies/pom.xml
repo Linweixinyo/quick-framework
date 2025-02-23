@@ -15,12 +15,13 @@
         <spring-cloud.version>2022.0.3</spring-cloud.version>
         <spring-cloud-alibaba.version>2022.0.0.0-RC2</spring-cloud-alibaba.version>
         <knife4j.version>4.3.0</knife4j.version>
-        <hutool.version>5.8.20</hutool.version>
+        <hutool.version>5.8.35</hutool.version>
         <redisson.version>3.24.3</redisson.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <jjwt.version>0.9.1</jjwt.version>
         <easyexcel.verion>3.3.4</easyexcel.verion>
         <guava.version>30.0-jre</guava.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
         <xxl-job.version>2.3.1</xxl-job.version>
         <transmittable-thread-local.version>2.14.2</transmittable-thread-local.version>
         <jetcache.version>2.7.5</jetcache.version>
@@ -103,6 +104,13 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
                 <version>${jjwt.version}</version>
+            </dependency>
+
+            <!--mapstryct-->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
             </dependency>
 
             <!--guava-->

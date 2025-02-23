@@ -23,6 +23,7 @@
         <module>encrypt</module>
         <module>idempotent</module>
         <module>sse</module>
+        <module>mail</module>
     </modules>
 
     <artifactId>frameworks</artifactId>
