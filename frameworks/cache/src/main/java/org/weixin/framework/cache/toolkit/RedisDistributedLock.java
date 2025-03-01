@@ -11,8 +11,7 @@ public final class RedisDistributedLock {
 
     private final RedissonClient redissonClient;
 
-
-    public void lock(String key, Runnable runnable, Long expire, TimeUnit timeUnit) {
+    public void lock(String key, Runnable runnable, long expire, TimeUnit timeUnit) {
         RLock lock = redissonClient.getLock(key);
         boolean locked = false;
         try {
@@ -20,11 +19,13 @@ public final class RedisDistributedLock {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if(!locked) throw new RuntimeException("请稍后再操作");
+        if (!locked) throw new RuntimeException("请稍后再操作");
         try {
             runnable.run();
         } finally {
-            lock.unlock();
+            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
         }
 
 
