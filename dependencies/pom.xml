@@ -21,6 +21,7 @@
         <jjwt.version>0.9.1</jjwt.version>
         <easyexcel.verion>3.3.4</easyexcel.verion>
         <guava.version>30.0-jre</guava.version>
+        <cola-statemachine.version>5.0.0</cola-statemachine.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <xxl-job.version>2.3.1</xxl-job.version>
         <transmittable-thread-local.version>2.14.2</transmittable-thread-local.version>
@@ -118,6 +119,12 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cola</groupId>
+                <artifactId>cola-component-statemachine</artifactId>
+                <version>${cola-statemachine.version}</version>
             </dependency>
 
             <!--xxl-job-->
