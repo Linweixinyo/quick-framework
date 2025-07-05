@@ -1,0 +1,22 @@
+{
+  "analysis": {
+    "analyzer": {
+      "custom_pinyin": {
+        "tokenizer": "ik_max_word",
+        "filter": "py"
+      },
+      "custom_smart_pinyin": {
+        "tokenizer": "ik_smart",
+        "filter": "py"
+      }
+    },
+    "filter": {
+      "py": {
+        "type": "pinyin",
+        "keep_original": true,
+        "keep_joined_full_pinyin": true,
+        "remove_duplicated_term": true
+      }
+    }
+  }
+}
