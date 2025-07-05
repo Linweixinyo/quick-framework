@@ -29,11 +29,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson-spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.weixin.framework</groupId>
             <artifactId>common</artifactId>
             <version>${project.version}</version>

@@ -1,9 +1,11 @@
 package org.weixin.framework.cache.core;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
+import org.weixin.framework.cache.toolkit.CacheUtil;
 
 import java.nio.charset.Charset;
 
@@ -18,7 +20,10 @@ public class RedisKeySerializer implements InitializingBean, RedisSerializer<Str
 
     @Override
     public byte[] serialize(String key) throws SerializationException {
-        String builderKey = keyPrefix + key;
+        if (StrUtil.isBlank(keyPrefix)) {
+            return key.getBytes();
+        }
+        String builderKey = CacheUtil.buildKey(keyPrefix, key);
         return builderKey.getBytes();
     }
 

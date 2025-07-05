@@ -1,5 +1,6 @@
 package org.weixin.framework.cache.toolkit;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,9 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.weixin.framework.common.toolkit.jackson.JSONUtil;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -68,7 +71,18 @@ public final class RedisDistributedCache {
         return stringRedisTemplate.opsForValue().setIfAbsent(key, valueStr, timeout, timeUnit);
     }
 
+
+    public String get(String key) {
+        if (StrUtil.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be blank");
+        }
+        return stringRedisTemplate.opsForValue().get(key);
+    }
+
     public <T> T get(String key, Class<T> clazz) {
+        if (StrUtil.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be blank");
+        }
         String value = stringRedisTemplate.opsForValue().get(key);
         if (String.class.isAssignableFrom(clazz)) {
             return (T) value;
@@ -77,38 +91,147 @@ public final class RedisDistributedCache {
     }
 
     public <T> T get(String key, TypeReference<T> typeReference) {
+        if (StrUtil.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be blank");
+        }
         String value = stringRedisTemplate.opsForValue().get(key);
         return JSONUtil.parseObject(value, typeReference);
     }
 
-    public <T> List<T> getOfList(String key, Class<T> clazz) {
+    public <T> List<T> getList(String key, Class<T> clazz) {
+        if (StrUtil.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be blank");
+        }
         String value = stringRedisTemplate.opsForValue().get(key);
         return JSONUtil.parseArray(value, clazz);
     }
 
-    public Boolean put(String key, Object value) {
-        if (!StrUtil.isBlank(key) || value == null) {
-            return false;
+    public void put(String key, Object value) {
+        if (StrUtil.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be blank");
+        }
+        if (value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
         }
         String actual = value instanceof String ? (String) value : JSONUtil.toJsonStr(value);
         stringRedisTemplate.opsForValue().set(key, actual);
-        return true;
     }
 
-    public Boolean put(String key, Object value, long timeout, TimeUnit timeUnit) {
-        if (!StrUtil.isBlank(key) || value == null) {
-            return false;
+    public void put(String key, Object value, long timeout, TimeUnit timeUnit) {
+        if (StrUtil.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be blank");
+        }
+        if (value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
         }
         String actual = value instanceof String ? (String) value : JSONUtil.toJsonStr(value);
         stringRedisTemplate.opsForValue().set(key, actual, timeout, timeUnit);
-        return true;
+    }
+
+    public String hashGet(String key, String hashkey) {
+        if (StrUtil.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be blank");
+        }
+        if (StrUtil.isBlank(hashkey)) {
+            throw new IllegalArgumentException("HashKey cannot be null");
+        }
+        Object value = stringRedisTemplate.opsForHash().get(key, hashkey);
+        return value instanceof String ? (String) value : JSONUtil.toJsonStr(value);
+    }
+
+
+    public <T> T hashGet(String key, String hashkey, Class<T> clazz) {
+        if (StrUtil.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be blank");
+        }
+        if (StrUtil.isBlank(hashkey)) {
+            throw new IllegalArgumentException("HashKey cannot be null");
+        }
+        Object value = stringRedisTemplate.opsForHash().get(key, hashkey);
+        String actual = value instanceof String ? (String) value : JSONUtil.toJsonStr(value);
+        return JSONUtil.parseObject(actual, clazz);
+    }
+
+    public <T> T hashGet(String key, String hashkey, TypeReference<T> typeReference) {
+        if (StrUtil.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be blank");
+        }
+        if (StrUtil.isBlank(hashkey)) {
+            throw new IllegalArgumentException("HashKey cannot be null");
+        }
+        Object value = stringRedisTemplate.opsForHash().get(key, hashkey);
+        String actual = value instanceof String ? (String) value : JSONUtil.toJsonStr(value);
+        return JSONUtil.parseObject(actual, typeReference);
+    }
+
+
+    public void hashPut(String key, String hashKey, Object value) {
+        if (StrUtil.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be blank");
+        }
+        if (value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
+        String actual = value instanceof String ? (String) value : JSONUtil.toJsonStr(value);
+        stringRedisTemplate.opsForHash().put(key, hashKey, actual);
+    }
+
+    public void hashPut(String key, String hashKey, Object value, long timeout, TimeUnit timeUnit) {
+        if (StrUtil.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be blank");
+        }
+        if (value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
+        String actual = value instanceof String ? (String) value : JSONUtil.toJsonStr(value);
+        stringRedisTemplate.expire(key, timeout, timeUnit);
+        stringRedisTemplate.opsForHash().put(key, hashKey, actual);
+    }
+
+    public void hashPut(String key, Map<String, Object> mapValue) {
+        if (StrUtil.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be blank");
+        }
+        if (CollectionUtil.isEmpty(mapValue)) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
+        Map<String, String> valueMap = new HashMap<>();
+        mapValue.forEach((hashKey, value) -> {
+            valueMap.put(hashKey, value instanceof String ? (String) value : JSONUtil.toJsonStr(value));
+        });
+        stringRedisTemplate.opsForHash().putAll(key, valueMap);
+    }
+
+    public void hashPut(String key, Map<String, Object> mapValue, long timeout, TimeUnit timeUnit) {
+        if (StrUtil.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be blank");
+        }
+        if (CollectionUtil.isEmpty(mapValue)) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
+        Map<String, String> valueMap = new HashMap<>();
+        mapValue.forEach((hashKey, value) -> {
+            valueMap.put(hashKey, value instanceof String ? (String) value : JSONUtil.toJsonStr(value));
+        });
+        stringRedisTemplate.expire(key, timeout, timeUnit);
+        stringRedisTemplate.opsForHash().putAll(key, valueMap);
+    }
+
+    public Boolean hashExists(String key, String hashKey) {
+        if (StrUtil.isBlank(key)) {
+            throw new IllegalArgumentException("Key cannot be blank");
+        }
+        if (StrUtil.isBlank(hashKey)) {
+            throw new IllegalArgumentException("HashKey cannot be null");
+        }
+        return stringRedisTemplate.opsForHash().hasKey(key, hashKey);
     }
 
     public void delete(String... keys) {
-        List<String> keyOfList = Arrays.stream(keys)
+        List<String> keyList = Arrays.stream(keys)
                 .filter(StrUtil::isNotBlank)
                 .collect(Collectors.toList());
-        stringRedisTemplate.delete(keyOfList);
+        stringRedisTemplate.delete(keyList);
     }
 
     public Boolean exists(String key) {
