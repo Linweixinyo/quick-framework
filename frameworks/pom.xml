@@ -24,6 +24,7 @@
         <module>idempotent</module>
         <module>sse</module>
         <module>mail</module>
+        <module>es</module>
     </modules>
 
     <artifactId>frameworks</artifactId>
