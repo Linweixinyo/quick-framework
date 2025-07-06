@@ -25,6 +25,7 @@
         <module>sse</module>
         <module>mail</module>
         <module>es</module>
+        <module>lock</module>
     </modules>
 
     <artifactId>frameworks</artifactId>
