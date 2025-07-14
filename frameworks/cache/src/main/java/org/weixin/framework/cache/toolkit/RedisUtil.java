@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public final class RedisDistributedCache {
+public final class RedisUtil {
 
     private final StringRedisTemplate stringRedisTemplate;
 
@@ -62,12 +62,7 @@ public final class RedisDistributedCache {
 
     public Boolean setObjectIfAbsent(String key, Object value, long timeout, TimeUnit timeUnit) {
         Class<?> clazz = value.getClass();
-        String valueStr;
-        if (String.class.isAssignableFrom(clazz)) {
-            valueStr = (String) value;
-        } else {
-            valueStr = JSONUtil.toJsonStr(value);
-        }
+        String valueStr = value instanceof String ? (String) value : JSONUtil.toJsonStr(value);
         return stringRedisTemplate.opsForValue().setIfAbsent(key, valueStr, timeout, timeUnit);
     }
 
