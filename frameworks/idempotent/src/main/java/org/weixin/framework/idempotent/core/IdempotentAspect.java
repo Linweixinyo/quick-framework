@@ -16,13 +16,11 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.web.multipart.MultipartFile;
-import org.weixin.framework.cache.toolkit.RedisDistributedCache;
+import org.weixin.framework.cache.toolkit.RedisUtil;
 import org.weixin.framework.idempotent.annotation.Idempotent;
 import org.weixin.framework.idempotent.config.IdempotentProperties;
 import org.weixin.framework.idempotent.toolkit.SpELUtil;
 import org.weixin.framework.web.core.exception.ServiceException;
-import org.weixin.framework.web.core.res.Result;
-import org.weixin.framework.web.core.res.Results;
 import org.weixin.framework.web.toolkit.ServletUtil;
 
 import java.util.*;
@@ -35,7 +33,7 @@ public class IdempotentAspect {
 
     private final IdempotentProperties idempotentProperties;
 
-    private final RedisDistributedCache redisDistributedCache;
+    private final RedisUtil redisUtil;
 
     @Before("@annotation(idempotent)")
     public void checkHandler(JoinPoint joinPoint, Idempotent idempotent) {
@@ -58,7 +56,7 @@ public class IdempotentAspect {
     }
 
     private void setUnionKey(Idempotent idempotent, String unionKey) {
-        if (redisDistributedCache.setObjectIfAbsent(unionKey, StrUtil.EMPTY, idempotent.interval(), idempotent.timeUnit())) {
+        if (redisUtil.setObjectIfAbsent(unionKey, StrUtil.EMPTY, idempotent.interval(), idempotent.timeUnit())) {
             IdempotentContext.setKey(unionKey);
         } else {
             throw new ServiceException(idempotent.message());
@@ -67,23 +65,16 @@ public class IdempotentAspect {
 
     @AfterReturning(pointcut = "@annotation(idempotent)", returning = "result")
     public void handlerAfterReturning(JoinPoint joinPoint, Idempotent idempotent, Object result) {
-        if (result instanceof Result<?> r) {
-            try {
-                // 成功则不删除redis数据 保证在有效时间内无法重复提交
-                if (Objects.equals(Results.SUCCESS_CODE, r.getCode())) {
-                    return;
-                }
-                redisDistributedCache.delete(IdempotentContext.getKey());
-            } finally {
-                IdempotentContext.removeKey();
-            }
-        }
+        IdempotentContext.removeKey();
     }
 
     @AfterThrowing(value = "@annotation(idempotent)", throwing = "exception")
     public void handlerAfterThrowing(Idempotent idempotent, Exception exception) {
-        redisDistributedCache.delete(IdempotentContext.getKey());
-        IdempotentContext.removeKey();
+        try {
+            redisUtil.delete(IdempotentContext.getKey());
+        } finally {
+            IdempotentContext.removeKey();
+        }
     }
 
 
