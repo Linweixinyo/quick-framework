@@ -7,10 +7,11 @@ public class CompletableCallable<V> implements Callable<V> {
 
     private final Callable<V> callable;
 
-    private CompletableFuture<V> completableFuture = new CompletableFuture<>();
+    private CompletableFuture<V> completableFuture;
 
     public CompletableCallable(Callable<V> callable) {
         this.callable = callable;
+        this.completableFuture = new CompletableFuture<>();
     }
 
     public CompletableCallable(Callable<V> callable, CompletableFuture<V> completableFuture) {

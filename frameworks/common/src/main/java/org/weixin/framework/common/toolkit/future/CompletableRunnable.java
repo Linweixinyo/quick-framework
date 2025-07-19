@@ -9,10 +9,11 @@ public class CompletableRunnable implements Runnable {
 
     private final Runnable runnable;
 
-    private CompletableFuture<Void> completableFuture = new CompletableFuture<>();
+    private CompletableFuture<Void> completableFuture;
 
     public CompletableRunnable(Runnable runnable) {
         this.runnable = runnable;
+        this.completableFuture = new CompletableFuture<>();
     }
 
     public CompletableRunnable(Runnable runnable, CompletableFuture<Void> completableFuture) {
