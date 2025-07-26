@@ -24,7 +24,7 @@ public abstract class JacksonTypeReferenceHandler<T> extends AbstractJsonTypeHan
      */
     @Override
     protected Object parse(String json) {
-        return JSONUtil.parseObject(json, this.getTypeReference());
+        return JSONUtil.parseObject(json, this.getTypeReference().getType());
     }
 
     /**

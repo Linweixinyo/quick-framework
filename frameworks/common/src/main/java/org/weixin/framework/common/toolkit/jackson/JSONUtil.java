@@ -4,18 +4,14 @@ import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -39,29 +35,16 @@ public final class JSONUtil {
         try {
             return OBJECT_MAPPER.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            log.error("object to json error: {}", e.getMessage(), e);
-            return StrUtil.EMPTY;
+            throw new IllegalArgumentException(e);
         }
     }
 
-    public static <T> T parseObject(String jsonStr, Class<T> clazz) {
-        if(StrUtil.isNotBlank(jsonStr)) {
-            try {
-                return OBJECT_MAPPER.readValue(jsonStr, clazz);
-            } catch (JsonProcessingException e) {
-                log.error("json to object error: {}", e.getMessage(), e);
-            }
-        }
-        return null;
-    }
-
-    public static <T> T parseObject(String text, TypeReference<T> typeReference) {
+    public static <T> T parseObject(String text, Type type) {
         try {
-            return OBJECT_MAPPER.readValue(text, typeReference);
+            return OBJECT_MAPPER.readValue(text, OBJECT_MAPPER.getTypeFactory().constructType(type));
         } catch (JsonProcessingException e) {
-            log.error("json to object error: {}", e.getMessage(), e);
+            throw new IllegalArgumentException(e);
         }
-        return null;
     }
 
     public static <T> List<T> parseArray(String jsonStr, Class<T> clazz) {
@@ -69,11 +52,20 @@ public final class JSONUtil {
             try {
                 return OBJECT_MAPPER.readValue(jsonStr, OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
             } catch (JsonProcessingException e) {
-                log.error("json to object array error: {}", e.getMessage(), e);
+                throw new IllegalArgumentException(e);
             }
         }
-       return Collections.emptyList();
+        throw new IllegalArgumentException("jsonStr is empty");
     }
+
+    public static <T> T convertObject(Object obj, Type type) {
+        return OBJECT_MAPPER.convertValue(obj, OBJECT_MAPPER.constructType(type));
+    }
+
+    public static <T> T convertObject(Object obj, Class<T> clazz) {
+        return OBJECT_MAPPER.convertValue(obj, clazz);
+    }
+
 
     public static ObjectMapper getObjectMapper() {
         return OBJECT_MAPPER;
