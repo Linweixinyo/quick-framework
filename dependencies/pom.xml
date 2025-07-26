@@ -30,6 +30,8 @@
         <fastjson2.version>2.0.36</fastjson2.version>
         <httpclient.version>4.5.13</httpclient.version>
         <logstash-logback-encoder.version>7.2</logstash-logback-encoder.version>
+        <aws-sdk.version>2.28.16</aws-sdk.version>
+        <aws-crt.version>0.31.3</aws-crt.version>
     </properties>
 
     <dependencyManagement>
@@ -164,6 +166,24 @@
                 <groupId>net.logstash.logback</groupId>
                 <artifactId>logstash-logback-encoder</artifactId>
                 <version>${logstash-logback-encoder.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>s3</artifactId>
+                <version>${aws-sdk.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>software.amazon.awssdk.crt</groupId>
+                <artifactId>aws-crt</artifactId>
+                <version>${aws-crt.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>s3-transfer-manager</artifactId>
+                <version>${aws-sdk.version}</version>
             </dependency>
 
         </dependencies>

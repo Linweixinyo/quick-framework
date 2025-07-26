@@ -26,6 +26,8 @@
         <module>mail</module>
         <module>es</module>
         <module>lock</module>
+        <module>job</module>
+        <module>oss</module>
     </modules>
 
     <artifactId>frameworks</artifactId>
