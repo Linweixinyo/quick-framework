@@ -34,10 +34,10 @@
                     <artifactId>netty-nio-client</artifactId>
                 </exclusion>
                 <!-- 将基于 CRT 的 HTTP 客户端从类路径中移除 -->
-                <exclusion>
+                <!-- <exclusion>
                     <groupId>software.amazon.awssdk</groupId>
                     <artifactId>aws-crt-client</artifactId>
-                </exclusion>
+                </exclusion> -->
                 <!-- 将基于 Apache 的 HTTP 客户端从类路径中移除 -->
                 <exclusion>
                     <groupId>software.amazon.awssdk</groupId>

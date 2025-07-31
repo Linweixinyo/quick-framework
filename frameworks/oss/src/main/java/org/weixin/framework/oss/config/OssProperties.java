@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = OssProperties.PREFIX)
 public class OssProperties {
 
-    public static final String PREFIX = "framework.cache.oss";
+    public static final String PREFIX = "framework.oss";
 
     /**
      * AccessKey

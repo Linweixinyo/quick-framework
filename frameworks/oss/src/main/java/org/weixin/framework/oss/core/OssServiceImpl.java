@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.time.Duration;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -108,15 +109,22 @@ public class OssServiceImpl implements OssService {
 
     private String getAccessUrl(String key) {
         String endpoint = ossProperties.getEndpoint();
+        String domain = ossProperties.getDomain();
         String bucketName = ossProperties.getBucketName();
         // MINIO的桶名称放置在域名后
         if (CloudServiceEnum.MINIO == ossProperties.getCloudServiceEnum()) {
-            return String.join(StrUtil.SLASH, endpoint, bucketName, key);
+            domain = Optional.ofNullable(domain)
+                    .filter(StrUtil::isNotBlank)
+                    .orElse(endpoint);
+            return String.join(StrUtil.SLASH, domain, bucketName, key);
         }
-        // https:// 或者 http://
-        String httpHeader = ReUtil.getGroup0("https?://", endpoint);
-        String domain = endpoint.replace(httpHeader, StrUtil.EMPTY);
-        return String.join(StrUtil.SLASH, String.join(StrUtil.DOT, httpHeader + bucketName, domain), key);
+        if (StrUtil.isBlank(domain)) {
+            // https:// 或者 http://
+            String httpHeader = ReUtil.getGroup0("https?://", endpoint);
+            domain = endpoint.replace(httpHeader, StrUtil.EMPTY);
+            return String.join(StrUtil.SLASH, String.join(StrUtil.DOT, httpHeader + bucketName, domain), key);
+        }
+        return String.join(StrUtil.SLASH, domain, key);
     }
 
     public static void main(String[] args) {
