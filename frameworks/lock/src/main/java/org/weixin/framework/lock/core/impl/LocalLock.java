@@ -49,9 +49,52 @@ public class LocalLock implements LockTemplate {
 
     @Override
     public void unlock(String key) {
-        ReentrantLock reentrantLock = LOCK_CACHE.getIfPresent(key);
+        // 注意：不要使用getIfPresent
+        ReentrantLock reentrantLock = null;
+        try {
+            reentrantLock = LOCK_CACHE.get(key, () -> {
+                log.error("unlock error lock key: {}", key);
+                throw new RuntimeException("unlock error lock key: " + key);
+            });
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
         if (Objects.nonNull(reentrantLock) && reentrantLock.isLocked() && reentrantLock.isHeldByCurrentThread()) {
             reentrantLock.unlock();
+            log.info("unlock success lock key: {} lock message: holdCount {}", key, reentrantLock.getHoldCount());
         }
+    }
+
+    public static int result = 0;
+
+    public static void main(String[] args) throws InterruptedException {
+        LocalLock localLock = new LocalLock();
+        Thread thread = new Thread(() -> {
+            for (int i = 0; i < 10000; i++) {
+                boolean locked = localLock.tryLock("test", 1, TimeUnit.MINUTES);
+                if (!locked) {
+                    continue;
+                }
+                try {
+                    result++;
+                } finally {
+                    localLock.unlock("test");
+                }
+            }
+        });
+        thread.start();
+        for (int i = 0; i < 10000; i++) {
+            boolean locked = localLock.tryLock("test", 1, TimeUnit.MINUTES);
+            if (!locked) {
+                continue;
+            }
+            try {
+                result++;
+            } finally {
+                localLock.unlock("test");
+            }
+        }
+        thread.join();
+        System.out.println(result);
     }
 }
