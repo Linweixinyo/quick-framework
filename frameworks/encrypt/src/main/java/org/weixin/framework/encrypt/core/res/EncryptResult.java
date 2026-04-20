@@ -1,7 +1,7 @@
 package org.weixin.framework.encrypt.core.res;
 
 import org.weixin.framework.encrypt.core.Encryptable;
-import org.weixin.framework.web.core.res.Result;
+import org.weixin.framework.common.web.core.res.Result;
 
 
 public class EncryptResult<T> extends Result<T> implements Encryptable {

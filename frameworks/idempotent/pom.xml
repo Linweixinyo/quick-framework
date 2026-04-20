@@ -19,6 +19,12 @@
     <dependencies>
         <dependency>
             <groupId>org.weixin.framework</groupId>
+            <artifactId>common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.weixin.framework</groupId>
             <artifactId>web</artifactId>
             <version>${project.version}</version>
         </dependency>

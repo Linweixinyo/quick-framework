@@ -1,4 +1,4 @@
-package org.weixin.framework.web.core.validation;
+package org.weixin.framework.common.web.core.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -20,5 +20,4 @@ public @interface ValidEnum {
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
-
 }

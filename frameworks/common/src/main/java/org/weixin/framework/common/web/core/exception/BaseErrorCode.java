@@ -1,4 +1,4 @@
-package org.weixin.framework.web.core.exception;
+package org.weixin.framework.common.web.core.exception;
 
 public enum BaseErrorCode implements IErrorCode {
     // ========== 一级宏观错误码 客户端错误 ==========
@@ -19,7 +19,6 @@ public enum BaseErrorCode implements IErrorCode {
     EMAIL_CODE_ERROR("B000008", "邮箱验证码不正确"),
     UPLOAD_FILE_ERROR("B000009", "上传文件失败"),
     EMAIL_SEND_ERROR("B000010", "邮件发送失败");
-
 
     private final String code;
 

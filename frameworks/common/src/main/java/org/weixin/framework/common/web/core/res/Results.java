@@ -1,8 +1,8 @@
-package org.weixin.framework.web.core.res;
+package org.weixin.framework.common.web.core.res;
 
-import org.weixin.framework.web.core.exception.AbstractException;
-import org.weixin.framework.web.core.exception.BaseErrorCode;
-import org.weixin.framework.web.core.exception.IErrorCode;
+import org.weixin.framework.common.web.core.exception.AbstractException;
+import org.weixin.framework.common.web.core.exception.BaseErrorCode;
+import org.weixin.framework.common.web.core.exception.IErrorCode;
 
 import java.util.Optional;
 
@@ -10,6 +10,9 @@ public final class Results {
 
     public static final String SUCCESS_CODE = "0";
     private static final String SUCCESS = "SUCCESS";
+
+    private Results() {
+    }
 
     /**
      * 成功响应
@@ -66,5 +69,4 @@ public final class Results {
                 .setCode(errorCode)
                 .setMessage(errorMessage);
     }
-
 }

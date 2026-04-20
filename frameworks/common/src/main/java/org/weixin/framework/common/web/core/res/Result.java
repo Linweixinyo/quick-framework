@@ -1,13 +1,11 @@
-package org.weixin.framework.web.core.res;
+package org.weixin.framework.common.web.core.res;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.io.Serial;
-import java.io.Serializable;
-
 /**
  * 全局返回对象
+ *
  * @param <T> 返回类型
  */
 @Data
@@ -28,6 +26,4 @@ public class Result<T> {
      * 响应数据
      */
     private T data;
-
-
 }
