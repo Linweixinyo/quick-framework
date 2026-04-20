@@ -18,6 +18,7 @@
         <module>swagger</module>
         <module>database</module>
         <module>websocket</module>
+        <module>websocket-webflux</module>
         <module>canal</module>
         <module>security</module>
         <module>encrypt</module>

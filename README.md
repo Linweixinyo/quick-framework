@@ -94,7 +94,8 @@ quick-framework/
 │   ├── sse/              # 服务器推送事件
 │   ├── swagger/          # API 文档
 │   ├── web/              # Web 层核心
-│   └── websocket/        # WebSocket 通信
+│   ├── websocket/        # WebSocket 通信（Spring MVC）
+│   └── websocket-webflux/ # WebSocket 通信（WebFlux）
 ├── service-demo/         # 示例服务
 │   ├── controller/       # 控制器示例
 │   ├── service/          # 服务层示例

@@ -10,7 +10,7 @@
     <modules>
         <module>dependencies</module>
         <module>frameworks</module>
-        <module>service-demo</module>
+        <module>services</module>
     </modules>
     <packaging>pom</packaging>
 
