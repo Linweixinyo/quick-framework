@@ -1,4 +1,4 @@
-package org.weixin.framework.web.core.validation;
+package org.weixin.framework.common.web.core.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -22,18 +22,18 @@ public class EnumValidator implements ConstraintValidator<ValidEnum, Object> {
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext constraintValidatorContext) {
-        if(Objects.isNull(value) || Objects.isNull(enumClass) || Objects.isNull(enumMethod)) {
+        if (Objects.isNull(value) || Objects.isNull(enumClass) || Objects.isNull(enumMethod)) {
             return true;
         }
         Enum<?>[] enumItems = enumClass.getEnumConstants();
-        if(Objects.isNull(enumItems) || enumItems.length == 0) {
+        if (Objects.isNull(enumItems) || enumItems.length == 0) {
             return true;
         }
         try {
             Method method = enumClass.getMethod(enumMethod);
             for (Enum<?> enumItem : enumItems) {
                 Object result = method.invoke(enumItem);
-                if(Objects.equals(value, result)) {
+                if (Objects.equals(value, result)) {
                     return true;
                 }
             }

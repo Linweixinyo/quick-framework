@@ -5,9 +5,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.weixin.framework.common.web.core.exception.BaseErrorCode;
+import org.weixin.framework.common.web.core.res.Results;
 import org.weixin.framework.security.core.tookit.SecurityUtil;
-import org.weixin.framework.web.core.exception.BaseErrorCode;
-import org.weixin.framework.web.core.res.Results;
 import org.weixin.framework.web.toolkit.ServletUtil;
 
 @Slf4j

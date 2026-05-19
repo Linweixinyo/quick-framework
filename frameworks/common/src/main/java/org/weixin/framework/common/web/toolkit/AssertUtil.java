@@ -1,12 +1,15 @@
-package org.weixin.framework.web.toolkit;
+package org.weixin.framework.common.web.toolkit;
 
-import org.weixin.framework.web.core.exception.BaseErrorCode;
-import org.weixin.framework.web.core.exception.IErrorCode;
-import org.weixin.framework.web.core.exception.ServiceException;
+import org.weixin.framework.common.web.core.exception.BaseErrorCode;
+import org.weixin.framework.common.web.core.exception.IErrorCode;
+import org.weixin.framework.common.web.core.exception.ServiceException;
 
 import java.util.Objects;
 
 public final class AssertUtil {
+
+    private AssertUtil() {
+    }
 
     public static void isTrue(boolean expression, IErrorCode errorCode) {
         if (!expression) {
@@ -56,7 +59,6 @@ public final class AssertUtil {
         }
     }
 
-
     private static void throwException(IErrorCode errorCode) {
         if (Objects.isNull(errorCode)) {
             errorCode = BaseErrorCode.SERVICE_ERROR;
@@ -70,5 +72,4 @@ public final class AssertUtil {
         }
         throw new ServiceException(message);
     }
-
 }

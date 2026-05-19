@@ -1,10 +1,8 @@
-package org.weixin.framework.web.core.exception;
-
+package org.weixin.framework.common.web.core.exception;
 
 import cn.hutool.core.util.StrUtil;
 
 import java.util.Optional;
-
 
 public class AbstractException extends RuntimeException {
 

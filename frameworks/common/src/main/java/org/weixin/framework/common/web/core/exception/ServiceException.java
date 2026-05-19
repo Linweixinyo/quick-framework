@@ -1,4 +1,4 @@
-package org.weixin.framework.web.core.exception;
+package org.weixin.framework.common.web.core.exception;
 
 public class ServiceException extends AbstractException {
 

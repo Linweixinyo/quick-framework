@@ -8,7 +8,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.weixin.framework.web.core.res.Result;
+import org.weixin.framework.common.web.core.res.Result;
 
 @Slf4j
 @RestControllerAdvice

@@ -17,10 +17,10 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.web.multipart.MultipartFile;
 import org.weixin.framework.cache.toolkit.RedisUtil;
+import org.weixin.framework.common.web.core.exception.ServiceException;
 import org.weixin.framework.idempotent.annotation.Idempotent;
 import org.weixin.framework.idempotent.config.IdempotentProperties;
 import org.weixin.framework.idempotent.toolkit.SpELUtil;
-import org.weixin.framework.web.core.exception.ServiceException;
 import org.weixin.framework.web.toolkit.ServletUtil;
 
 import java.util.*;
