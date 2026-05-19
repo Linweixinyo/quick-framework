@@ -50,11 +50,11 @@ public class CacheAutoConfiguration {
     @RequiredArgsConstructor
     static class CustomCachingConfigurer implements CachingConfigurer {
 
-        private final RedisTemplate<Object, Object> redisTemplate;
+        private final RedisUtil redisUtil;
 
         @Override
         public CacheManager cacheManager() {
-            return new CustomSpringCacheManager(redisTemplate);
+            return new CustomSpringCacheManager(redisUtil);
         }
 
         @Override
@@ -69,8 +69,8 @@ public class CacheAutoConfiguration {
     }
 
     @Bean
-    public CachingConfigurer cachingConfigurer(RedisTemplate<Object, Object> redisTemplate) {
-        return new CustomCachingConfigurer(redisTemplate);
+    public CachingConfigurer cachingConfigurer(RedisUtil redisUtil) {
+        return new CustomCachingConfigurer(redisUtil);
     }
 
 }

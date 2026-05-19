@@ -3,7 +3,7 @@ package org.weixin.framework.cache.core;
 import cn.hutool.core.collection.CollectionUtil;
 import org.springframework.cache.Cache;
 import org.springframework.cache.support.AbstractCacheManager;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.weixin.framework.cache.toolkit.RedisUtil;
 
 import java.util.*;
 
@@ -11,10 +11,10 @@ public class CustomSpringCacheManager extends AbstractCacheManager {
 
     private final Map<String, Cache> cacheMap = new HashMap<>();
 
-    private RedisTemplate<Object, Object> redisTemplate;
+    private final RedisUtil redisUtil;
 
-    public CustomSpringCacheManager(RedisTemplate<Object, Object> redisTemplate, String... cacheNames) {
-        this.redisTemplate = redisTemplate;
+    public CustomSpringCacheManager(RedisUtil redisUtil, String... cacheNames) {
+        this.redisUtil = redisUtil;
         this.setCacheNames(Arrays.asList(cacheNames));
     }
 
@@ -23,7 +23,7 @@ public class CustomSpringCacheManager extends AbstractCacheManager {
             return;
         }
         for (String cacheName : cacheNames) {
-            cacheMap.put(cacheName, new CustomSpringCache(true, cacheName, redisTemplate));
+            cacheMap.put(cacheName, new CustomSpringCache(true, cacheName, redisUtil));
         }
     }
 
@@ -34,6 +34,8 @@ public class CustomSpringCacheManager extends AbstractCacheManager {
 
     @Override
     protected Cache getMissingCache(String name) {
-        return cacheMap.put(name, new CustomSpringCache(true, name, redisTemplate));
+        CustomSpringCache customSpringCache = new CustomSpringCache(true, name, redisUtil);
+        cacheMap.put(name, customSpringCache);
+        return customSpringCache;
     }
 }
