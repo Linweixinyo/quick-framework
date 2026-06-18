@@ -11,6 +11,7 @@
         <module>dependencies</module>
         <module>frameworks</module>
         <module>services</module>
+        <module>archetype</module>
     </modules>
     <packaging>pom</packaging>
 

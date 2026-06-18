@@ -3,6 +3,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Maven Archetype generated resources
+/archetype/src/main/resources/archetype-resources/
+
 ### STS ###
 .apt_generated
 .classpath

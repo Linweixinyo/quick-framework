@@ -129,7 +129,41 @@ cd quick-framework
 mvn clean install
 ```
 
-### 4. 创建业务模块
+### 4. 作为 Maven Archetype 使用
+
+当前仓库提供 `quick-framework-archetype` 模块，可在本地安装后生成新的多模块框架源码项目。
+
+仓库默认不提交 `archetype-resources` 生成物。使用前需要先在本地同步模板资源，再安装 Archetype：
+
+```powershell
+./script/sync-archetype-resources.ps1
+mvn -pl archetype install
+```
+
+`archetype-resources` 由当前源码生成，后续框架源码变化后需要重新执行同步脚本。
+
+再生成新项目：
+
+```powershell
+mvn archetype:generate `
+  "-DarchetypeGroupId=org.weixin.framework" `
+  "-DarchetypeArtifactId=quick-framework-archetype" `
+  "-DarchetypeVersion=1.0-SNAPSHOT" `
+  "-DgroupId=com.example.demo" `
+  "-DartifactId=demo-framework" `
+  "-Dversion=1.0-SNAPSHOT" `
+  "-Dpackage=com.example.demo" `
+  "-DprojectName=Demo Framework" `
+  "-DdeveloperName=developer" `
+  "-DdeveloperEmail=developer@example.com" `
+  "-DdeveloperUrl=https://example.com" `
+  "-DrepositoryUrl=https://example.com/demo-framework" `
+  "-DinteractiveMode=false"
+```
+
+`package` 默认可与 `groupId` 保持一致；如果需要不同 Java 基础包名，可在生成时显式覆盖。
+
+### 5. 创建业务模块
 
 在父模块下创建新的 Maven 模块：
 
@@ -144,7 +178,7 @@ mvn clean install
 <artifactId>your-service</artifactId>
 ```
 
-### 5. 引入所需模块
+### 6. 引入所需模块
 
 ```xml
 
@@ -179,7 +213,7 @@ mvn clean install
 </dependencies>
 ```
 
-### 6. 配置文件
+### 7. 配置文件
 
 ```yaml
 server:

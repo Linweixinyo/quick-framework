@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor
+        xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.1.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.1.0 https://maven.apache.org/xsd/archetype-descriptor-1.1.0.xsd"
+        name="quick-framework">
+
+    <requiredProperties>
+        <requiredProperty key="projectName">
+            <defaultValue>${artifactId}</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="developerName">
+            <defaultValue>developer</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="developerEmail">
+            <defaultValue>developer@example.com</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="developerUrl">
+            <defaultValue>https://example.com</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="repositoryUrl">
+            <defaultValue>https://example.com/${artifactId}</defaultValue>
+        </requiredProperty>
+    </requiredProperties>
+
+    <fileSets>
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
+            <directory></directory>
+            <includes>
+                <include>pom.xml</include>
+                <include>README.md</include>
+                <include>.gitignore</include>
+            </includes>
+        </fileSet>
+
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
+            <directory>dependencies</directory>
+            <includes>
+                <include>**/*.xml</include>
+            </includes>
+        </fileSet>
+
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
+            <directory>frameworks</directory>
+            <includes>
+                <include>**/*.xml</include>
+                <include>**/*.imports</include>
+                <include>**/*.json</include>
+                <include>**/*.lua</include>
+            </includes>
+        </fileSet>
+
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
+            <directory>frameworks</directory>
+            <includes>
+                <include>**/src/main/java/**/*.java</include>
+                <include>**/src/test/java/**/*.java</include>
+            </includes>
+        </fileSet>
+
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
+            <directory>frameworks</directory>
+            <includes>
+                <include>**/src/main/resources/**/*.xml</include>
+                <include>**/src/main/resources/**/*.imports</include>
+                <include>**/src/main/resources/**/*.json</include>
+                <include>**/src/main/resources/**/*.lua</include>
+                <include>**/src/test/resources/**/*.xml</include>
+                <include>**/src/test/resources/**/*.json</include>
+            </includes>
+        </fileSet>
+
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
+            <directory>services</directory>
+            <includes>
+                <include>**/*.xml</include>
+                <include>**/*.md</include>
+                <include>**/*.example</include>
+                <include>**/*.sh</include>
+                <include>**/*.yml</include>
+                <include>**/Dockerfile*</include>
+            </includes>
+        </fileSet>
+
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
+            <directory>script</directory>
+            <includes>
+                <include>**/*.sql</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+
+</archetype-descriptor>
