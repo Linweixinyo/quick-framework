@@ -175,8 +175,8 @@ public final class RedisUtil {
             throw new IllegalArgumentException("Value cannot be null");
         }
         String actual = value instanceof String ? (String) value : JSONUtil.toJsonStr(value);
-        stringRedisTemplate.expire(key, timeout, timeUnit);
         stringRedisTemplate.opsForHash().put(key, hashKey, actual);
+        stringRedisTemplate.expire(key, timeout, timeUnit);
     }
 
     public void hashPut(String key, Map<String, Object> mapValue) {
@@ -204,8 +204,8 @@ public final class RedisUtil {
         mapValue.forEach((hashKey, value) -> {
             valueMap.put(hashKey, value instanceof String ? (String) value : JSONUtil.toJsonStr(value));
         });
-        stringRedisTemplate.expire(key, timeout, timeUnit);
         stringRedisTemplate.opsForHash().putAll(key, valueMap);
+        stringRedisTemplate.expire(key, timeout, timeUnit);
     }
 
     public Boolean hashExists(String key, String hashKey) {
