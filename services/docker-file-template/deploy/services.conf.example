@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# 多服务部署声明示例。
+# 每个值都是 docker-file 目录下的服务目录名。
+# 使用前请先为每个服务目录准备：
+# - Dockerfile-backend
+# - docker-compose.yml
+# - .env
+# - app.jar
+SERVICES=(
+  "api-service"
+  "admin-service"
+)

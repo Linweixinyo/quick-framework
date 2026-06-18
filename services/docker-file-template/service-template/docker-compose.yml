@@ -1,0 +1,43 @@
+# Copyright 2024-2026 the original author or authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+services:
+  backend:
+    image: ${SERVICE_IMAGE:-app-service:latest}
+    build:
+      context: ..
+      dockerfile: ./${SERVICE_DIR:-service-template}/Dockerfile-backend
+      args:
+        SERVICE_DIR: ${SERVICE_DIR:-service-template}
+        APP_PORT: ${APP_PORT:-8080}
+    container_name: ${SERVICE_CONTAINER_NAME:-app-service}
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-app_db}?useSSL=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USERNAME:-root}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD:-change-me}
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATA_REDIS_DATABASE: ${REDIS_DATABASE:-0}
+      SPRING_DATA_REDIS_PASSWORD: ${REDIS_PASSWORD:-change-me}
+    ports:
+      - "${HOST_PORT:-8080}:${APP_PORT:-8080}"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    external: true
+    name: ${APP_NETWORK:-app-network}
