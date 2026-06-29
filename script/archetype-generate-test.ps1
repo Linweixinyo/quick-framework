@@ -18,6 +18,7 @@ if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
 $archetypeGroupId = "org.weixin.framework"
 $archetypeArtifactId = "quick-framework-archetype"
 $archetypeVersion = "1.0-SNAPSHOT"
+$archetypePluginVersion = "3.2.1"
 
 if ([string]::IsNullOrWhiteSpace($Package)) {
     $Package = $GroupId
@@ -31,7 +32,8 @@ New-Item -ItemType Directory -Path $OutputDirectory -Force | Out-Null
 
 Push-Location $OutputDirectory
 try {
-    mvn archetype:generate `
+    mvn "org.apache.maven.plugins:maven-archetype-plugin:${archetypePluginVersion}:generate" `
+        "-DarchetypeCatalog=local" `
         "-DarchetypeGroupId=$archetypeGroupId" `
         "-DarchetypeArtifactId=$archetypeArtifactId" `
         "-DarchetypeVersion=$archetypeVersion" `
@@ -45,6 +47,10 @@ try {
         "-DdeveloperUrl=https://example.com" `
         "-DrepositoryUrl=https://example.com/$ArtifactId" `
         "-DinteractiveMode=false"
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "Maven Archetype 生成失败，退出码：$LASTEXITCODE"
+    }
 }
 finally {
     Pop-Location

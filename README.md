@@ -133,33 +133,40 @@ mvn clean install
 
 当前仓库提供 `quick-framework-archetype` 模块，可在本地安装后生成新的多模块框架源码项目。
 
+Archetype 使用独立 POM，不依赖当前框架的父 POM或 `dependencies` BOM。安装后可直接从其他目录生成项目。
+
 仓库默认不提交 `archetype-resources` 生成物。使用前需要先在本地同步模板资源，再安装 Archetype：
 
 ```powershell
 ./script/sync-archetype-resources.ps1
-mvn -pl archetype install
+mvn -pl 'archetype' install
 ```
 
 `archetype-resources` 由当前源码生成，后续框架源码变化后需要重新执行同步脚本。
 
-再生成新项目：
+进入新项目的父目录，再生成新项目。不要在当前模板项目根目录执行，否则 Maven 会将新项目注册为当前项目的子模块。
 
 ```powershell
+Set-Location '项目路径'
+
 mvn archetype:generate `
-  "-DarchetypeGroupId=org.weixin.framework" `
-  "-DarchetypeArtifactId=quick-framework-archetype" `
-  "-DarchetypeVersion=1.0-SNAPSHOT" `
-  "-DgroupId=com.example.demo" `
-  "-DartifactId=demo-framework" `
-  "-Dversion=1.0-SNAPSHOT" `
-  "-Dpackage=com.example.demo" `
-  "-DprojectName=Demo Framework" `
-  "-DdeveloperName=developer" `
-  "-DdeveloperEmail=developer@example.com" `
-  "-DdeveloperUrl=https://example.com" `
-  "-DrepositoryUrl=https://example.com/demo-framework" `
-  "-DinteractiveMode=false"
+  '-DarchetypeCatalog=local' `
+  '-DarchetypeGroupId=org.weixin.framework' `
+  '-DarchetypeArtifactId=quick-framework-archetype' `
+  '-DarchetypeVersion=1.0-SNAPSHOT' `
+  '-DgroupId=com.example.demo' `
+  '-DartifactId=demo-framework' `
+  '-Dversion=1.0-SNAPSHOT' `
+  '-Dpackage=com.example.demo' `
+  '-DprojectName=Demo Framework' `
+  '-DdeveloperName=developer' `
+  '-DdeveloperEmail=developer@example.com' `
+  '-DdeveloperUrl=https://example.com' `
+  '-DrepositoryUrl=https://example.com/demo-framework' `
+  '-DinteractiveMode=false'
 ```
+
+上述示例会生成 `项目路径/demo-framework`。`artifactId` 同时作为生成目录名。
 
 `package` 默认可与 `groupId` 保持一致；如果需要不同 Java 基础包名，可在生成时显式覆盖。
 

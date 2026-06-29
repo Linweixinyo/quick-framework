@@ -27,7 +27,6 @@
         <fileSet filtered="true" packaged="false" encoding="UTF-8">
             <directory></directory>
             <includes>
-                <include>pom.xml</include>
                 <include>README.md</include>
                 <include>.gitignore</include>
             </includes>
@@ -36,17 +35,16 @@
         <fileSet filtered="true" packaged="false" encoding="UTF-8">
             <directory>dependencies</directory>
             <includes>
-                <include>**/*.xml</include>
+                <include>pom.xml</include>
+                <include>**/pom.xml</include>
             </includes>
         </fileSet>
 
         <fileSet filtered="true" packaged="false" encoding="UTF-8">
             <directory>frameworks</directory>
             <includes>
-                <include>**/*.xml</include>
-                <include>**/*.imports</include>
-                <include>**/*.json</include>
-                <include>**/*.lua</include>
+                <include>pom.xml</include>
+                <include>**/pom.xml</include>
             </includes>
         </fileSet>
 
@@ -73,7 +71,14 @@
         <fileSet filtered="true" packaged="false" encoding="UTF-8">
             <directory>services</directory>
             <includes>
-                <include>**/*.xml</include>
+                <include>pom.xml</include>
+                <include>**/pom.xml</include>
+            </includes>
+        </fileSet>
+
+        <fileSet filtered="false" packaged="false" encoding="UTF-8">
+            <directory>services</directory>
+            <includes>
                 <include>**/*.md</include>
                 <include>**/*.example</include>
                 <include>**/*.sh</include>

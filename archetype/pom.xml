@@ -4,17 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.weixin.framework</groupId>
-        <artifactId>quick-framework</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
-
+    <groupId>org.weixin.framework</groupId>
     <artifactId>quick-framework-archetype</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>maven-archetype</packaging>
 
     <name>Quick Framework Archetype</name>
     <description>Quick Framework 多模块源码模板 Archetype</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
 
     <build>
         <extensions>
