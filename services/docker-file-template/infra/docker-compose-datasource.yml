@@ -13,6 +13,25 @@
 # limitations under the License.
 
 services:
+  postgres:
+    image: postgres:16.14-bookworm
+    container_name: ${POSTGRES_CONTAINER_NAME:-postgres16}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      POSTGRES_DB: ${POSTGRES_DB:-app_db}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   mysql:
     image: mysql:8.0
     container_name: ${MYSQL_CONTAINER_NAME:-mysql8}
@@ -64,6 +83,7 @@ services:
       retries: 3
 
 volumes:
+  postgres-data:
   mysql-data:
   redis-data:
 
