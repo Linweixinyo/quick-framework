@@ -21,11 +21,14 @@ services:
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
       POSTGRES_DB: ${POSTGRES_DB:-app_db}
+      TZ: Asia/Shanghai
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    shm_size: 256mb
     networks:
       - app-network
     restart: unless-stopped
+    stop_grace_period: 60s
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 30s
@@ -52,6 +55,7 @@ services:
     networks:
       - app-network
     restart: unless-stopped
+    stop_grace_period: 60s
     healthcheck:
       test: [ "CMD-SHELL", "mysqladmin ping -h localhost -u root -p\"$${MYSQL_ROOT_PASSWORD}\"" ]
       interval: 30s
@@ -63,12 +67,17 @@ services:
     container_name: ${REDIS_CONTAINER_NAME:-redis72}
     ports:
       - "${REDIS_PORT:-6379}:6379"
+    environment:
+      REDISCLI_AUTH: ${REDIS_PASSWORD:-change-me}
+      TZ: Asia/Shanghai
     command:
       - redis-server
       - --appendonly
       - "yes"
+      - --appendfsync
+      - everysec
       - --protected-mode
-      - "no"
+      - "yes"
       - --requirepass
       - ${REDIS_PASSWORD:-change-me}
     volumes:
@@ -76,8 +85,9 @@ services:
     networks:
       - app-network
     restart: unless-stopped
+    stop_grace_period: 60s
     healthcheck:
-      test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-change-me}", "ping" ]
+      test: [ "CMD-SHELL", "redis-cli ping | grep -qx PONG" ]
       interval: 30s
       timeout: 10s
       retries: 3
